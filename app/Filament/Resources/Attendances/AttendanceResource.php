@@ -24,9 +24,9 @@ class AttendanceResource extends Resource
     protected static ?string $model = Attendance::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClock;
-    protected static ?string $navigationLabel = 'Riwayat Absensi';
-    protected static ?string $modelLabel = 'Absensi Saya';
-    protected static ?string $slug = 'riwayat-absensi';
+    protected static ?string $navigationLabel = 'Riwayat Presensi';
+    protected static ?string $modelLabel = 'Presensi Saya';
+    protected static ?string $slug = 'riwayat-presensi';
     protected static ?int $navigationSort = 2;
     protected static ?string $recordTitleAttribute = 'id';
 

@@ -65,7 +65,7 @@ public function form(Schema $schema): Schema
             ]),
 
         Section::make('Lokasi & Geofencing')
-            ->description('Koordinat kantor digunakan untuk menvalidasi lokasi karyawan saat absensi')
+            ->description('Koordinat kantor digunakan untuk menvalidasi lokasi magang saat presensi')
             ->icon('heroicon-o-map-pin')
             ->schema([
                 TextInput::make('office_latitude')
@@ -94,10 +94,10 @@ public function form(Schema $schema): Schema
                     ->maxValue(1000)
                     ->suffix('meter')
                     ->placeholder('50')
-                    ->helperText('Intern harus berada dalam radius ini untuk bisa absensi'),
+                    ->helperText('Intern harus berada dalam radius ini untuk bisa presensi'),
             ])->columns(2),
        Section::make('Jam Kerja')
-            ->description('Karyawan yang check-in setelah batas ini dianggap terlambat.')
+            ->description('Peserta magang yang check-in setelah batas ini dianggap terlambat.')
             ->icon('heroicon-o-clock')
             ->schema([
                 TimePicker::make('late_threshold')
@@ -105,7 +105,7 @@ public function form(Schema $schema): Schema
                     ->required()
                     ->seconds(false)
                     
-                    ->helperText('Karyawan yang check-in setelah jam ini akan ditandai terlambat')
+                    ->helperText('Peserta Magang yang check-in setelah jam ini akan ditandai terlambat')
                    
             ]),
             Section::make('Whatsapp Gateway')

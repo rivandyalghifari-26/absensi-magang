@@ -29,6 +29,8 @@ class AppPanelProvider extends PanelProvider
             ->path('app')
             ->viteTheme('resources/css/filament/app/theme.css')
             ->login()
+            ->brandName('PRESENSI MAGANG')
+            ->spa(false)
 
             ->colors([
                 'primary' => Color::Amber,
@@ -40,6 +42,7 @@ class AppPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
+                \App\Filament\Widgets\SetupFaceWarning::class,
                 AccountWidget::class,
                 FilamentInfoWidget::class,
             ])
@@ -54,10 +57,10 @@ class AppPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
 
-
+                
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ], isPersistent: true);
+            ]);
     }
 }

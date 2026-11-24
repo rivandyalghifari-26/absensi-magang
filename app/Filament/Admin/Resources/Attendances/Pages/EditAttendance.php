@@ -15,7 +15,7 @@ class EditAttendance extends EditRecord
 
     public function getTitle(): string|Htmlable 
     {
-      return "Edit Absensi - {$this->record->intern->intern_code} - {$this->record->intern->user->name} ({$this->record->date->format('d/m/Y')})";
+      return "Edit Presensi - {$this->record->intern->intern_code} - {$this->record->intern->user->name} ({$this->record->date->format('d/m/Y')})";
     }
 
 

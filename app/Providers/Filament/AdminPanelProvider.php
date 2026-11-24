@@ -28,6 +28,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->login()
+            ->brandName('PRESENSI MAGANG')
 
             ->colors([
                 'primary' => Color::Amber,

@@ -22,11 +22,11 @@ class AttendanceController extends Controller
     public function checkIn(Request $request): JsonResponse
     {
         $intern = Auth::user()->intern;
-        //cek apakah karyawan sudah melakukan absensi hari ini
+        //cek apakah magang sudah melakukan absensi hari ini
 
         if ($intern->todayAttendance()->exists()){
             return response()->json([
-                'message' => 'Anda sudah melakukan absensi hari ini'
+                'message' => 'Anda sudah melakukan presensi hari ini'
             ], 422);
         }
 

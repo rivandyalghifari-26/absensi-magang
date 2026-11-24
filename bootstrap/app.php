@@ -13,8 +13,13 @@ return Application::configure(
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withExceptions(function (
-        Exceptions $exceptions
-    ): void {
+    ->withMiddleware(function (Middleware $middleware): void {
+
+        $middleware->alias([
+            'web' => \Illuminate\Session\Middleware\StartSession::class,
+        ]);
+
+    })
+    ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();

@@ -23,9 +23,9 @@ class AttendanceResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClock;
     protected static string|UnitEnum|null $navigationGroup = 'Manajemen SDM';
-    protected static ?string $navigationLabel = 'Absensi';
-    protected static ?string $modelLabel = 'Absensi';
-    protected static ?string $slug = 'absensi';
+    protected static ?string $navigationLabel = 'Presensi';
+    protected static ?string $modelLabel = 'Presensi';
+    protected static ?string $slug = 'presensi';
     protected static ?int $navigationSort = 2;
 
     protected static ?string $recordTitleAttribute = 'intern_id';

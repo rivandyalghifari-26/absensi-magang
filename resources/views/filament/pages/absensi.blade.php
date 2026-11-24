@@ -4,22 +4,22 @@
 
          @if ($hasCheckedIn && $hasCheckedOut)
          <div class="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
-            <p class="text-green-700 font-semibold">Anda telah melakukan absensi masuk dan keluar hari ini</p>
+            <p class="text-green-700 font-semibold">Anda telah melakukan presensi masuk dan keluar hari ini</p>
                <p class="text-sm text-green-600 mt-1">
                 Masuk: {{ $attendance->check_in}} | Keluar: {{$attendance->check_out}}
                </p>
          </div>
          @elseif($hasCheckedIn)
          <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 text-center">
-            <p class="text-blue-700 font-semibold">Anda telah melakukan absensi masuk hari ini</p>
+            <p class="text-blue-700 font-semibold">Anda telah melakukan presensi masuk hari ini</p>
                <p class="text-sm text-blue-600 mt-1">
                 Masuk: {{ $attendance->check_in}} 
                </p>
-                <p class="text-blue-700 font-semibold">Jangan lupa untuk melakukan absensi keluar nanti</p>
+                <p class="text-blue-700 font-semibold">Jangan lupa untuk melakukan presensi keluar nanti</p>
          </div>
         @else 
                  <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-center">
-            <p class="text-yellow-700 font-semibold">Belum melakukan absensi hari ini</p>
+            <p class="text-yellow-700 font-semibold">Belum melakukan presensi hari ini</p>
          
          </div>
          @endif

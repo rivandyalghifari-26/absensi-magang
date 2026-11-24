@@ -8,6 +8,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
+use Illuminate\Support\Facades\Hash;
 
 class InternForm
 {
@@ -73,12 +74,16 @@ class InternForm
                            }
                         ),
                     TextInput::make('password')
-                        ->label('Password')
-                        ->password()
-                        ->required(fn(string $context) => $context === 'create')
-                        ->dehydrated(fn($state) => filled($state))
-                        ->helperText('Kosongkan jika tidak ingin mengubah password'),
-
+    ->label('Password')
+    ->password()
+    ->required(fn(string $context) => $context === 'create')
+    ->dehydrateStateUsing(fn ($state) =>
+        filled($state)
+            ? Hash::make($state)
+            : null
+    )
+    ->dehydrated(fn ($state) => filled($state))
+    ->helperText('Kosongkan jika tidak ingin mengubah password'),
                         Toggle::make('user.is_active')
                         ->label('Akun Aktif')
                         ->default(true)

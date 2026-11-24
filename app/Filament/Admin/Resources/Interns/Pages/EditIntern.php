@@ -37,9 +37,14 @@ class EditIntern extends EditRecord
         'email' => $userData['email'],
         'is_active' => $userData['is_active'],
        ];
-       if (!empty($userData['password'])){
-        $updateUser['password'] = bcrypt($userData['password']);
-       }
+      if (
+    isset($data['password']) &&
+    filled($data['password'])
+) {
+    $updateUser['password'] =
+        $updateUser['password'] =
+    $data['password'];
+}
        $record->user->update($updateUser);
        $record->update($internData);
 

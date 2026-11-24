@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\Auth;
 class Absensi extends Page
 {
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCamera;
-    protected static ?string $navigationLabel = 'Absensi';
-    protected static ?string $title = 'Absensi Harian';
-    protected static ?string $slug = 'absensi';
+    protected static ?string $navigationLabel = 'Presensi';
+    protected static ?string $title = 'Presensi Harian';
+    protected static ?string $slug = 'presensi';
     protected static ?int $navigationSort = 1;
 
     protected string $view = 'filament.pages.absensi';

@@ -13,13 +13,13 @@ class SetupFace extends Page
     protected static ?string $slug =
         'setup-face';
 
-  protected static bool
-    $shouldRegisterNavigation = false;
+    protected static bool
+        $shouldRegisterNavigation = true;
 
     protected static string|BackedEnum|null
         $navigationIcon =
         'heroicon-o-face-smile';
 
     protected string $view =
-    'filament.pages.setup-face';
+        'filament.pages.setup-face';
 }

@@ -71,6 +71,15 @@ class AttendancesTable
                         default => $state,
                     }),
             ])
+              ->headerActions([
+                ExportAction::make()
+                    ->label('Export Excel')
+                    ->exports([
+                        ExcelExport::make()
+                            ->fromTable()
+                            ->withFilename(fn () => 'presensi-magang-' . date('Y-m-d')),
+                    ]),
+              ])
             
             ->filters([
                 SelectFilter::make('status')

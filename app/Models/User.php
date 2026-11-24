@@ -13,9 +13,13 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use App\Models\Intern;
 use Laravel\Sanctum\HasApiTokens;
 
-#[Fillable(['name', 'email', 'password','role','is_active'])]
+// Import kontrak Filament
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
+
+#[Fillable(['name', 'email', 'password', 'role', 'is_active'])]
 #[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
@@ -30,26 +34,25 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'is_active' =>'boolean',
+            'is_active' => 'boolean',
         ];
     }
+
     public function intern(): HasOne
-{
-    return $this->hasOne(Intern::class);
-}
-
-public function canAccessPanel(
-    \Filament\Panel $panel
-): bool {
-
-    if ($panel->getId() === 'admin') {
-        return $this->role === 'admin';
+    {
+        return $this->hasOne(Intern::class);
     }
 
-    if ($panel->getId() === 'app') {
-        return $this->role === 'intern';
+    public function canAccessPanel(Panel $panel): bool
+    {
+        if ($panel->getId() === 'admin') {
+            return $this->role === 'admin' && (bool) $this->is_active;
+        }
+
+        if ($panel->getId() === 'app') {
+          return in_array($this->role, ['intern', 'admin']) && (bool) $this->is_active;
     }
 
-    return false;
-}
+        return false;
+    }
 }

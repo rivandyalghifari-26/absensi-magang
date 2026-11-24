@@ -15,7 +15,7 @@ class AttendanceForm
     {
         return $schema
             ->components([
-                Section::make('Data Absensi')
+                Section::make('Data Presensi')
                     ->schema([
                         Select::make('intern_id')
                             ->label('Magang')

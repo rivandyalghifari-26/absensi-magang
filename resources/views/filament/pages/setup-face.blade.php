@@ -35,11 +35,7 @@
     <x-filament::button id="btnSave" class="w-full" disabled>
         Simpan Data Wajah
     </x-filament::button>
-    @if (auth()->user()->intern?->face_descriptor)
-    <button id="btnReset" class="w-full bg-red-100 hover:bg-red-200 text-red-700 font-medium py-2 rounded-xl transition text-sm">
-        Hapus Data Wajah
-    </button>
-@endif
+  
 
     </div>
 
@@ -127,21 +123,7 @@
 
 
             })
-            if(btnReset) {
-                btnReset.addEventListener('click', async () => {
-                    if(!confirm('Yakin ingin mengahpus data wajah ini?')) return;
-
-                   const res = await fetch('/app/setup-face/destroy', {
-    method: 'DELETE',
-    headers: {
-                            'X-CSRF-TOKEN': CSRF
-                        },
-                    });
-                if(res.ok) 
-                    alert('Data wajah terhapus');
-                    window.location.reload();
-                })
-            }
+           
 
             init()
 

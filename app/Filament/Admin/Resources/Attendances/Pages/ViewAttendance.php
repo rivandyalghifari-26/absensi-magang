@@ -16,14 +16,14 @@ class ViewAttendance extends ViewRecord
 
     public function getTitle(): string|Htmlable 
     {
-      return "Detail Absensi - {$this->record->intern->intern_code} - {$this->record->intern->user->name} ({$this->record->date->format('d/m/Y')})";
+      return "Detail Presensi - {$this->record->intern->intern_code} - {$this->record->intern->user->name} ({$this->record->date->format('d/m/Y')})";
     }
 
     protected function getHeaderActions(): array
     {
         return [
             EditAction::make()
-            ->label('Edit Absensi')
+            ->label('Edit Presensi')
             ->color('primary')
             ->icon(Heroicon::OutlinedPencil)
             ->iconSize('xs'),
