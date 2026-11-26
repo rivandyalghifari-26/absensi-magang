@@ -25,15 +25,15 @@ class LeaveRequestsResource extends Resource
     protected static ?string $model = LeaveRequest::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
-    
+
     protected static ?string $navigationLabel = 'Pengajuan Izin';
     protected static ?string $modelLabel = 'Pengajuan Izin';
     protected static ?string $slug = 'pengajuan-izin';
     protected static ?int $navigationSort = 3;
 
-    
 
-    public static function getEloquentQuery(): Builder 
+
+    public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->whereInternId(Auth::user()->intern->id);
     }
@@ -41,9 +41,9 @@ class LeaveRequestsResource extends Resource
    public static function canEdit(Model $record): bool
    {
     return $record->status === 'pending';
-   } 
+   }
 
-   public static function canDelete(Model $record): bool 
+   public static function canDelete(Model $record): bool
    {
      return $record->status === 'pending';
    }
