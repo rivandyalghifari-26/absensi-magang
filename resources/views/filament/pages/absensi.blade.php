@@ -13,14 +13,14 @@
          <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 text-center">
             <p class="text-blue-700 font-semibold">Anda telah melakukan presensi masuk hari ini</p>
                <p class="text-sm text-blue-600 mt-1">
-                Masuk: {{ $attendance->check_in}} 
+                Masuk: {{ $attendance->check_in}}
                </p>
                 <p class="text-blue-700 font-semibold">Jangan lupa untuk melakukan presensi keluar nanti</p>
          </div>
-        @else 
+        @else
                  <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-center">
             <p class="text-yellow-700 font-semibold">Belum melakukan presensi hari ini</p>
-         
+
          </div>
          @endif
 
@@ -29,7 +29,8 @@
         <p class="text-sm text-gray-500 text-center mb-3">
             Pastikan wajah anda terlihat jelas di kamera
         </p>
-        <video  id="video" class="w-full rounded-lg border border-gray-300" autoplay muted playsinline></video>
+          <div class="flex justify-center">
+        <video  id="video" class="w-52 h-52 object-cover rounded-lg border border-gray-300 shadow-inner" autoplay muted playsinline></video>
        </div>
 
       {{-- Info GPS --}}
@@ -45,12 +46,12 @@
 
       {{-- Tombol absensi --}}
      @if (!$hasCheckedIn)
-         <button disabled id="btnCheckin" 
+         <button disabled id="btnCheckin"
          class="w-full bg-green-500 hover:bg-green-700 disabled:bg-gray-300 text-white font-bold py-3 rounded-xl transition">
         Check-In Sekarang
         </button>
     @elseif(!$hasCheckedOut)
-       <button disabled id="btnCheckout" 
+       <button disabled id="btnCheckout"
          class="w-full bg-blue-500 hover:bg-blue-700 disabled:bg-gray-300 text-white font-bold py-3 rounded-xl transition">
         Check-Out Sekarang
         </button>
@@ -61,7 +62,7 @@
 
     </div>
 <script src="{{ asset('face-api/face-api.min.js')}}"> </script>
-<script> 
+<script>
     const MODEL_URL = '/face-api/models';
     const API_TOKEN = @json($token);
     const CSRF_TOKEN = @json(csrf_token());
@@ -102,8 +103,8 @@
         timeout: 10000
     }
 
- ) 
- // kamera 
+ )
+ // kamera
  async function initFaceApi() {
     try {
         await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
@@ -139,40 +140,30 @@ detectionInterval = setInterval(async () => {
 
         const faceResult = await getFaceResult();
 
-        if(faceResult.face_verified) {
-
-            faceVerified = true;
-
+        if(faceResult && faceResult.not_registered) {
+           faceVerified = false;
             faceStatus.textContent =
-                'Wajah terdeteksi. Wajah sudah cocok.';
-
-            faceStatus.className =
-                'text-xs text-center text-green-600';
-
-        } else {
-
-            faceVerified = false;
-
-            faceStatus.textContent =
-                'Wajah terdeteksi, tetapi wajah tidak cocok.';
+                'Data wajah belum terdaftar. Lakukan Setup Face Terlebih Dahulu.';
 
             faceStatus.className =
                 'text-xs text-center text-red-600';
+
+        } else if (faceResult && faceResult.face_verified) {
+            faceVerified = true;
+            faceStatus.textContent = 'Wajah terdeteksi. Wajah sudah cocok.';
+            faceStatus.className = 'text-xs text-center text-green-600';
+        } else {
+            faceVerified = false;
+            faceStatus.textContent = 'Wajah terdeteksi, tetapi wajah tidak cocok.';
+            faceStatus.className = 'text-xs text-center text-red-600';
         }
-
     } else {
-
         faceVerified = false;
-
-        faceStatus.textContent =
-            'Wajah tidak terdeteksi. Pastikan wajah terlihat jelas';
-
-        faceStatus.className =
-            'text-xs text-center text-yellow-600';
+        faceStatus.textContent = 'Wajah tidak terdeteksi. Pastikan wajah terlihat jelas';
+        faceStatus.className = 'text-xs text-center text-yellow-600';
     }
 
     tryEnableButtons();
-
 }, 1500);
     } catch (err) {
          faceStatus.textContent = 'Gagal memuat model pengenalan wajah';
@@ -181,7 +172,7 @@ detectionInterval = setInterval(async () => {
  }
  //hidupkan button jika semua syarat terpenuhi
  function tryEnableButtons() {
-    const ready = currentLat !== null && modelIsLoaded && faceDetection;
+    const ready = currentLat !== null && modelIsLoaded && faceVerified;
     if(btnCheckin) btnCheckin.disabled = !ready;
     if (btnCheckout) btnCheckout.disabled = !ready;
 
@@ -190,38 +181,40 @@ detectionInterval = setInterval(async () => {
         detectionInterval = null;
     }
  }
- //hitung jarak wajah vs referensi 
+ //hitung jarak wajah vs referensi
  async function getFaceResult(){
-    if(referenceDescriptor.length !== 128) {
+    if (!referenceDescriptor || referenceDescriptor.length !== 128) {
         return {
-            face_distance: 0,
-            face_verified: true
+            face_distance: null,
+            face_verified: false,
+            not_registered: true
         };
     }
-    const detection = await faceapi 
-    .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
-    .withFaceLandmarks()
-    .withFaceDescriptor();
 
-    if(!detection) {
+    const detection = await faceapi
+        .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
+        .withFaceLandmarks()
+        .withFaceDescriptor();
+
+    if (!detection) {
         return null;
     }
-
 
     const refFloat = new Float32Array(referenceDescriptor);
     const distance = faceapi.euclideanDistance(detection.descriptor, refFloat);
     return {
         face_distance: distance,
-        face_verified: distance < 0.5
+        face_verified: distance < 0.5,
+        not_registered: false
     };
- }
- //kirim ke API 
+}
+ //kirim ke API
  async function doAttendance(endpoint) {
     if(!currentLat || !currentLng) return showResult('GPS tidak tersedia', 'red');
     if(!faceDetection) return showResult('Wajah tidak terdeteksi', 'red');
 
     const faceResult = await getFaceResult();
-    
+
     showResult('Memproses absensi ...', 'yellow');
 
     if (btnCheckin) btnCheckin.disabled = true;
@@ -232,6 +225,7 @@ detectionInterval = setInterval(async () => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': `Bearer ${API_TOKEN}`,
                 'X-CSRF-TOKEN': CSRF_TOKEN
             },
